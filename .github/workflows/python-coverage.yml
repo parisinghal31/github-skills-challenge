@@ -30,7 +30,7 @@ jobs:
       - name: Execute tests and generate coverage
         # --cov-fail-under enforces the minimum requirement and fails the job if not met
         run: |
-          pytest tests/calculation_tests.py --cov=src --cov-report=xml --cov-fail-under=80
+          pytest tests/calculations_test.py --cov=src --cov-report=xml --cov-fail-under=80
          
       - name: Publish Coverage Report to PR
         # Uses a pre-built GitHub Action to post the XML report as a PR comment
