@@ -34,7 +34,7 @@ jobs:
          
       - name: Publish Coverage Report to PR
         # Uses a pre-built GitHub Action to post the XML report as a PR comment
-        uses: MishaKav/pytest-coverage-action@main
+        uses: MishaKav/pytest-coverage-comment@v1
         # Use 'always()' to ensure the comment posts even if the threshold step above fails
         if: always()
         with:
