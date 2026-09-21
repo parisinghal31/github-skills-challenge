@@ -1,0 +1,41 @@
+name: Python Test Coverage
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+# Explicit permissions required to post a comment on the pull request
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+       
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+         
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+         
+      - name: Execute tests and generate coverage
+        # --cov-fail-under enforces the minimum requirement and fails the job if not met
+        run: |
+          pytest tests/calculation_tests.py --cov=src --cov-report=xml --cov-fail-under=80
+         
+      - name: Publish Coverage Report to PR
+        # Uses a pre-built GitHub Action to post the XML report as a PR comment
+        uses: MishaKav/pytest-coverage-action@main
+        # Use 'always()' to ensure the comment posts even if the threshold step above fails
+        if: always()
+        with:
+          pytest-xml-coverage-path: ./coverage.xml
